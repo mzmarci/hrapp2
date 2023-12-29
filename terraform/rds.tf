@@ -33,11 +33,11 @@ resource "aws_security_group" "database_security_group" {
     security_groups = [aws_security_group.hr_app_security_group.id]
   }
 
-    ingress {
-    description     = "postgres"
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
+  ingress {
+    description = "postgres"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 

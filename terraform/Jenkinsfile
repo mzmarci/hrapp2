@@ -28,7 +28,6 @@ pipeline {
          steps {
             sh '''
                   cd HR_APP
-                  ls
                   docker build -t mzmarci/hrapp:$version .
                '''   
          }

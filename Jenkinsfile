@@ -27,7 +27,7 @@ pipeline {
        stage ("build image") {
          steps {
             sh '''
-                  cd HR_APP
+                  cd hrapp2
                   docker build -t mzmarci/hrapp:$version .
                '''   
          }
@@ -52,18 +52,18 @@ pipeline {
        }
            
     
-       stage ("Run ansible") {
-         steps {
-            sh '''
-                 cd HR_APP
-                 cd Ansible
-                 pwd 
-                 ls
-                 ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory --key-file $keyfile playbook.yml -u ec2-usec
-                 ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory  --key-file $keyfile playbookA.yml -u ec2-user 
-               '''
-         }
-       }
+      //  stage ("Run ansible") {
+      //    steps {
+      //       sh '''
+      //            cd hrapp2
+      //            cd Ansible
+      //            pwd 
+      //            ls
+      //            ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory --key-file $keyfile playbook.yml -u ec2-usec
+      //            ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory  --key-file $keyfile playbookA.yml -u ec2-user 
+      //          '''
+      //    }
+      //  }
 
     }
 

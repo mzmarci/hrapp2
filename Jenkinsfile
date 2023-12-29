@@ -18,7 +18,7 @@ pipeline {
        stage ("download code") {
          steps {
             sh '''
-            git clone https://github.com/mzmarci/HR_APP.git
+            git clone https://github.com/mzmarci/hrapp2.git
            
             '''
          }

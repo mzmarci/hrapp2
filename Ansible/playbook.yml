@@ -1,0 +1,14 @@
+---
+- hosts: hrapp
+  become: true
+  become_method: sudo
+  vars: 
+    AWS_ACCESS_KEY_ID: 
+    POSTGRES_HOST: 
+    POSTGRES_PASSWORD: 
+    AWS_SECRET_ACCESS_KEY: 
+
+  tasks:
+
+    - name: running HRAPP docker instance
+      ansible.builtin.command: docker run -d -p 80:5000 -e POSTGRES_HOST=project.cuzbrlyt8tuq.eu-west-1.rds.amazonaws.com -e POSTGRES_USER=hr_project -e POSTGRES_PASSWORD="{{POSTGRES_PASSWORD}}" -e POSTGRES_DATABASE_NAME=postgres -e TO_ADDRESS=mzmazy100@gmail.com  -e SOURCE_ADDRESS=mzmazy100@gmail.com -e AWS_REGION_NAME="eu-west-1" -e AWS_ACCESS_KEY_ID="{{AWS_ACCESS_KEY_ID}}" -e AWS_SECRET_ACCESS_KEY="{{AWS_SECRET_ACCESS_KEY}}" mzmarci/hrapp:v3

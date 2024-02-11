@@ -4,6 +4,8 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
+*Devkey1.pem*
+*Devkey1.pub*
 # Crash log files
 crash.log
 crash.*.log

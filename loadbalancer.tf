@@ -35,37 +35,6 @@ resource "aws_lb_target_group" "hr_app_target_group" {
   }
 }
 
-# create a listener on port 80 with redirect action
-resource "aws_lb_listener" "hr_app_http_listener" {
-  load_balancer_arn = aws_lb.hr_app_load_balancer.arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type = "redirect"
-
-    redirect {
-      port        = 443
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
-}
-
-# create a listener on port 443 with forward action
-resource "aws_lb_listener" "hr_app_https_listener" {
-  load_balancer_arn = aws_lb.hr_app_load_balancer.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.hr_app_target_group.arn
-  }
-}
-
-
 # create a listener on port 80 with forward action
 resource "aws_lb_listener" "hr_app_https_listener2" {
   load_balancer_arn = aws_lb.hr_app_load_balancer.arn
@@ -78,3 +47,35 @@ resource "aws_lb_listener" "hr_app_https_listener2" {
     target_group_arn = aws_lb_target_group.hr_app_target_group.arn
   }
 }
+
+# # create a listener on port 80 with redirect action
+# resource "aws_lb_listener" "hr_app_http_listener" {
+#   load_balancer_arn = aws_lb.hr_app_load_balancer.arn
+#   port              = 80
+#   protocol          = "HTTP"
+
+#   default_action {
+#     type = "redirect"
+
+#     redirect {
+#       port        = 443
+#       protocol    = "HTTPS"
+#       status_code = "HTTP_301"
+#     }
+#   }
+# }
+
+# # create a listener on port 443 with forward action
+# resource "aws_lb_listener" "hr_app_https_listener" {
+#   load_balancer_arn = aws_lb.hr_app_load_balancer.arn
+#   port              = 443
+#   protocol          = "HTTPS"
+#   ssl_policy        = "ELBSecurityPolicy-2016-08"
+
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.hr_app_target_group.arn
+#   }
+# }
+
+

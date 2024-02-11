@@ -50,20 +50,34 @@ pipeline {
                '''
          }
        }
+
+
+       stage ("Run ansible") {
+         steps {
+            sh '''
+                 cd hrapp2
+                 cd Ansible
+                 pwd 
+                 ls
+                 ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory --key-file $keyfile playbook.yml -u ec2-usec
+                 ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory  --key-file $keyfile playbookA.yml -u ec2-user 
+               '''
+         }
+       }      
+       stage ("run docker-compose") {
+         steps {
+            sh '''
+                  cd hrapp2
+                  cd docker-compose
+                  docker-compose up
+                
+                '''
+         }
+       }
            
     
-      //  stage ("Run ansible") {
-      //    steps {
-      //       sh '''
-      //            cd hrapp2
-      //            cd Ansible
-      //            pwd 
-      //            ls
-      //            ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory --key-file $keyfile playbook.yml -u ec2-usec
-      //            ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory  --key-file $keyfile playbookA.yml -u ec2-user 
-      //          '''
-      //    }
-      //  }
+
+      
 
     }
 

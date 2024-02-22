@@ -1,5 +1,5 @@
 module "hrapp" {
-  source                      = ".hrapp2/modules/ec2"
+  source                      = "../modules/ec2"
   ami                         = "ami-0a7abae115fc0f825"
   instance_type               =  "t2.micro"
   key_name                    = ""

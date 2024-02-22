@@ -57,7 +57,7 @@ resource "aws_security_group" "database_security_group" {
 # create the subnet group for the rds instance
 resource "aws_db_subnet_group" "database_subnet_group" {
   name        = "database_subnets"
-  subnet_ids  = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id]
+  subnet_ids  = [aws_subnet.public_subnets[*].id]#change to the public subnet id
   description = "subnet for database instance"
 
   tags = {
@@ -72,14 +72,14 @@ resource "aws_db_instance" "db_instance" {
   engine_version         = "15.3"
   multi_az               = false
   identifier             = "project"
-  username               = "hr_project"
-  password               = "marci123"
+  username               = var.rds_password
+  password               = var.rds_password
   instance_class         = "db.t3.micro"
   allocated_storage      = 400
   db_subnet_group_name   = aws_db_subnet_group.database_subnet_group.id
   vpc_security_group_ids = [aws_security_group.database_security_group.id]
-  availability_zone      = data.aws_availability_zones.available_zones.names[0]
-  db_name                = "projects"
+  availability_zone      = data.aws_availability_zones.available_zones.names[count.index]
+  db_name                = var.db_name
   publicly_accessible    = true
   skip_final_snapshot    = true
 }

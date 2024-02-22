@@ -4,7 +4,7 @@ resource "aws_lb" "hr_app_load_balancer" {
   internal                   = false
   load_balancer_type         = "application"
   security_groups            = [aws_security_group.hr_app_security_group.id]
-  subnets                    = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id]
+  subnets                    = [aws_subnet.public_subnets[*].id]
   enable_deletion_protection = false
 
   tags = {

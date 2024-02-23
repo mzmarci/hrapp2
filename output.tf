@@ -3,5 +3,5 @@ output "Subnet" {
 }
 
 output "Hr_app_ip" {
-  value = module.hrapp.Hr_App.id
+  value = module.hrapp.id
 }

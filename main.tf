@@ -1,72 +1,73 @@
+
 module "hrapp" {
-  source                      = "../modules/ec2"
-  ami                         = "ami-0a7abae115fc0f825"
-  instance_type               =  "t2.micro"
-  key_name                    = ""
+  source                      = "./module/ec2"
+  ec2_ami =                   = ""
+  instance_type               =  ""
+  key_name                    = aws_key_pair.Devkey.key_name
   vpc_security_group_ids      = module.mainvpc.hr_app_vpc.id
   subnet_id                   = module.mainvpc.public_subnets[*].id
-  associate_public_ip_address = true
+
 }
 
 
 module "mainvpc" {
-  source = "./modules/networking"
+  source = "./module/networking"
   tags = {
     Name = "Create VPC"
   }
 }
-resource "null_resource" "Hr_App-provisioner" {
+# resource "null_resource" "Hr_App-provisioner" {
 
-    triggers = {
-    public_ip = aws_instance.Hr_App.public_ip
-  }
-    connection {
-    user          = "ec2-user"
-    host          = aws_instance.Hr_App.public_ip
-    private_key   = tls_private_key.rsa.private_key_pem
-    timeout       = "30"
-  }
+#     triggers = {
+#     public_ip = aws_instance.Hr_App.public_ip
+#   }
+#     connection {
+#     user          = "ec2-user"
+#     host          = aws_instance.Hr_App.public_ip
+#     private_key   = tls_private_key.rsa.private_key_pem
+#     timeout       = "30"
+#   }
 
-    # Copy the key file to instance
-  provisioner "file" {
-    source      = "./"
-    destination = "/tmp"
-  }
+#     # Copy the key file to instance
+#   provisioner "file" {
+#     source      = "./"
+#     destination = "/tmp"
+#   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum update -y",
-      "sudo yum install -y git",
-      "sudo amazon-linux-extras install docker -y",
-      "sudo usermod -a -G docker ec2-user",
-      "sudo chkconfig docker on",
-      "sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose",
-      "sudo chmod +x /usr/local/bin/docker-compose",
-      "sudo yum install pip -y",
-      "sudo pip install --user ansible",
-      "sudo yum -y python3-pip",
-      "sudo yum install python3 -y",
-      "sudo pip3 install boto3",
-      "sudo yum install https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip",
-      "unzip terraform_1.4.6_linux_amd64.zip",
-      "sudo mv terraform /usr/bin",
-      "sudo yum install git java-11-amazon-corretto-devel.x86_64 -y",
-      "sudo yum install -y jenkins java-11-openjdk-devel",
-      "sudo yum -y install wget",
-      "sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo",
-      "sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key",
-      "sudo yum upgrade -y",
-      "sudo yum install jenkins -y",
-      "sudo usermod -aG docker jenkins",
-      "sudo systemctl start jenkins",
+#   provisioner "remote-exec" {
+#     inline = [
+#       "sudo yum update -y",
+#       "sudo yum install -y git",
+#       "sudo amazon-linux-extras install docker -y",
+#       "sudo usermod -a -G docker ec2-user",
+#       "sudo chkconfig docker on",
+#       "sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose",
+#       "sudo chmod +x /usr/local/bin/docker-compose",
+#       "sudo yum install pip -y",
+#       "sudo pip install --user ansible",
+#       "sudo yum -y python3-pip",
+#       "sudo yum install python3 -y",
+#       "sudo pip3 install boto3",
+#       "sudo yum install https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip",
+#       "unzip terraform_1.4.6_linux_amd64.zip",
+#       "sudo mv terraform /usr/bin",
+#       "sudo yum install git java-11-amazon-corretto-devel.x86_64 -y",
+#       "sudo yum install -y jenkins java-11-openjdk-devel",
+#       "sudo yum -y install wget",
+#       "sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo",
+#       "sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key",
+#       "sudo yum upgrade -y",
+#       "sudo yum install jenkins -y",
+#       "sudo usermod -aG docker jenkins",
+#       "sudo systemctl start jenkins",
 
-     ]
-    }
+#      ]
+#     }
 
-  provisioner "local-exec" {
-    command = "echo '${tls_private_key.rsa.private_key_pem}' >> ${aws_key_pair.Devkey.id}.pem ; chmod 400 ${aws_key_pair.Devkey.id}.pem"
-  }
-}
+#   provisioner "local-exec" {
+#     command = "echo '${tls_private_key.rsa.private_key_pem}' >> ${aws_key_pair.Devkey.id}.pem ; chmod 400 ${aws_key_pair.Devkey.id}.pem"
+#   }
+# }
 
  
 
@@ -88,37 +89,37 @@ resource "local_file" "Devkey" {
 }
 
 
-resource "null_resource" "Hr_App-provisioner1" {
+# resource "null_resource" "Hr_App-provisioner1" {
 
-    triggers = {
-    public_ip = aws_instance.Hr_App2.public_ip
-  }
-    connection {
-    user          = "ec2-user"
-    host          = aws_instance.Hr_App.public_ip
-    private_key   = tls_private_key.rsa.private_key_pem
-    timeout       = "30"
-  }
+#     triggers = {
+#     public_ip = aws_instance.Hr_App2.public_ip
+#   }
+#     connection {
+#     user          = "ec2-user"
+#     host          = aws_instance.Hr_App.public_ip
+#     private_key   = tls_private_key.rsa.private_key_pem
+#     timeout       = "30"
+#   }
 
-    # Copy the key file to instance
-  provisioner "file" {
-    source      = "./"
-    destination = "/tmp"
-  }
+#     # Copy the key file to instance
+#   provisioner "file" {
+#     source      = "./"
+#     destination = "/tmp"
+#   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum update -y",
-      "sudo yum install -y git",
-      "sudo amazon-linux-extras install docker -y",
-      "sudo usermod -a -G docker ec2-user",
-      "sudo chkconfig docker on",
-      "sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose",
-      "sudo chmod +x /usr/local/bin/docker-compose"
+#   provisioner "remote-exec" {
+#     inline = [
+#       "sudo yum update -y",
+#       "sudo yum install -y git",
+#       "sudo amazon-linux-extras install docker -y",
+#       "sudo usermod -a -G docker ec2-user",
+#       "sudo chkconfig docker on",
+#       "sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose",
+#       "sudo chmod +x /usr/local/bin/docker-compose"
 
-    ] 
-  }
-}
+#     ] 
+#   }
+# }
 
 
 

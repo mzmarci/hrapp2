@@ -21,7 +21,7 @@ module "mainvpc" {
   private_subnet_cidrs   = var.private_subnet_cidrs
   vpc_cidr               = var.vpc_cidr
   db_name                = var.db_name
-  vpc_id                 = var.vpc_id
+  vpc_id                 = module.vpc.vpc_id
 
   tags = {
     Name = "Create VPC"

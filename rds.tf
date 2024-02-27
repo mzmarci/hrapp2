@@ -23,7 +23,7 @@ data "aws_availability_zones" "available_zones" {}
 resource "aws_security_group" "database_security_group" {
   name        = "database security group"
   description = "enable postgres access on port 5432"
-  vpc_id      = var.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress {
     description     = "postgres"

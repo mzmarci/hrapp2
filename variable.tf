@@ -43,12 +43,12 @@ variable "db_name" {
   ]
 }
 
-variable "vpc_security_group_ids" {}
 
-variable "private_subnets_id" {
+
+/* variable "private_subnets_id" {
   type        = list(string)
   description = "subnet to create for private subnet"
 
-}
+} */
 
-variable "vpc_id" {}
+//variable "vpc_id" {}

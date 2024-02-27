@@ -7,8 +7,7 @@ locals {
 resource "aws_security_group" "hr_app_security_group" {
   name        = "hr_app_security_group"
   description = "Allow SSH and HTTP Connection"
-  vpc_id      = aws_vpc.hr_app_vpc.id
-
+  vpc_id      = var.vpc_id
 
 
 

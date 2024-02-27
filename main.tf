@@ -1,21 +1,38 @@
 
 module "hrapp" {
-  source                      = "./module/ec2"
-  ec2_ami =                   = ""
-  instance_type               =  ""
-  key_name                    = aws_key_pair.Devkey.key_name
-  vpc_security_group_ids      = module.mainvpc.hr_app_vpc.id
-  subnet_id                   = module.mainvpc.public_subnets[*].id
+  source                 = "./module/ec2"
+  ec2_ami                = "ami-0a7abae115fc0f825"
+  ec2_instance_type      = "t2.micro"
+  ec2_key_name           = "test100"
+  vpc_security_group_ids = module.security_group.hr_app_security_group_id
+  subnet_id              = module.mainvpc.public_subnets_id[*]
 
 }
 
 
 module "mainvpc" {
-  source = "./module/networking"
+  source                 = "./module/networking"
+  vpc_security_group_ids = module.security_group.hr_app_security_group_id
+  private_subnets_id     = module.mainvpc.private_subnets_id
+  public_subnets_id      = module.mainvpc.public_subnets_id
+  rds_password           = var.rds_password
+  rds_username           = var.rds_username
+  public_subnet_cidrs    = var.public_subnet_cidrs
+  private_subnet_cidrs   = var.private_subnet_cidrs
+  vpc_cidr               = var.vpc_cidr
+  db_name                = var.db_name
+  vpc_id                 = var.vpc_id
+
   tags = {
     Name = "Create VPC"
   }
 }
+
+module "security_group" {
+  source = "./module/security_groups"
+  vpc_id = module.mainvpc.vpc_id
+}
+
 # resource "null_resource" "Hr_App-provisioner" {
 
 #     triggers = {
@@ -69,9 +86,9 @@ module "mainvpc" {
 #   }
 # }
 
- 
 
-resource "aws_key_pair" "Devkey" {
+
+/* resource "aws_key_pair" "Devkey" {
   key_name   = "Devkey"
   public_key = tls_private_key.rsa.public_key_openssh
 }
@@ -86,7 +103,7 @@ resource "local_file" "Devkey" {
   content  = tls_private_key.rsa.private_key_pem
   filename = "Devkey.pem"
   file_permission = 0400
-}
+} */
 
 
 # resource "null_resource" "Hr_App-provisioner1" {
@@ -147,7 +164,7 @@ resource "local_file" "Devkey" {
 #   subnet_id                   = aws_subnet.subnet_1.id
 #   associate_public_ip_address = true
 #   user_data = file("user_data.sh.tpl")
-  
+
 #   tags = {
 #     Name = "Monitoring"
 #     Unit = "PROD"

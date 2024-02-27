@@ -3,7 +3,7 @@ resource "aws_instance" "Hr_App" {
   ami                         = var.ec2_ami
   instance_type               = var.ec2_instance_type
   key_name                    = var.ec2_key_name
-  vpc_security_group_ids      = [aws_security_group.hr_app_security_group.id]
+  //vpc_security_group_ids      = var.vpc_security_group_ids
   subnet_id                   = var.subnet_id
   associate_public_ip_address = true
   //user_data = file("user_data.sh.tpl")

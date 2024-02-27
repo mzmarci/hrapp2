@@ -10,7 +10,7 @@ resource "aws_vpc" "hr_app_vpc" {
 }
 
 # use data source to get all avalablility zones in region
-data "aws_availability_zones" "available_zones" {}
+#data "aws_availability_zones" "available_zones" {}
 
 resource "aws_subnet" "public_subnets" {
   count             = length(split(",", var.public_subnet_cidrs))
@@ -18,7 +18,9 @@ resource "aws_subnet" "public_subnets" {
   cidr_block        = element(split(",", var.public_subnet_cidrs), count.index)
   availability_zone = data.aws_availability_zones.available_zones.names[count.index]
   map_public_ip_on_launch = true
-  tags = length(var.tags)
+  tags = {
+    Name = "Public Subnet ${count.index + 1}"
+    }
   
 }
 
@@ -53,13 +55,13 @@ resource "aws_route_table" "route_2" {
 
 resource "aws_route_table_association" "public_route" {
   count             = length(aws_subnet.public_subnets[*].id)
-  subnet_id         = element(aws_subnet.public_subnet[*].id, count.index)
+  subnet_id         = element(aws_subnet.public_subnets[*].id, count.index)
   route_table_id = aws_route_table.route_1.id
 }
 
 resource "aws_route_table_association" "route_2" {
   count             = length(aws_subnet.public_subnets[*].id)
-  subnet_id         = element(aws_subnet.public_subnet[*].id, count.index)
+  subnet_id         = element(aws_subnet.public_subnets[*].id, count.index)
   route_table_id    = aws_route_table.route_2.id
 }
 
@@ -108,12 +110,31 @@ resource "aws_route_table" "Private2" {
 
 resource "aws_route_table_association" "Private_1" {
   count             = length(aws_subnet.private_subnets[*].id)
-  subnet_id         = element(aws_subnet.private_subnet[*].id, count.index)
+  subnet_id         = element(aws_subnet.private_subnets[*].id, count.index)
   route_table_id    = aws_route_table.Private1.id
 }
 
 resource "aws_route_table_association" "Private_2" {
   count             = length(aws_subnet.private_subnets[*].id)
-  subnet_id         = element(aws_subnet.private_subnet[*].id, count.index)
+  subnet_id         = element(aws_subnet.private_subnets[*].id, count.index)
   route_table_id    = aws_route_table.Private2.id
+}
+
+#create natgateway with eip
+resource "aws_eip" "nat" {
+  count = length(var.private_subnet_cidrs)
+  vpc = true
+  tags = {
+    Name = "PrivateEip"
+  }
+}
+
+resource "aws_nat_gateway" "Nat1" {
+  count = length(var.private_subnet_cidrs) 
+  allocation_id = aws_eip.nat[count.index].id
+  subnet_id         = element(aws_subnet.private_subnets[*].id, count.index)
+  tags = {
+    Name = "PrivateNat"
+  }
+  
 }

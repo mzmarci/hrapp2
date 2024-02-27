@@ -3,8 +3,8 @@ resource "aws_lb" "hr_app_load_balancer" {
   name                       = "hr-app-alb"
   internal                   = false
   load_balancer_type         = "application"
-  security_groups            = [aws_security_group.hr_app_security_group.id]
-  subnets                    = [aws_subnet.public_subnets[*].id]
+  security_groups            = module.security_group.hr_app_security_group_id
+  subnets                    = module.mainvpc.public_subnets_id[*]
   enable_deletion_protection = false
 
   tags = {
@@ -18,7 +18,7 @@ resource "aws_lb_target_group" "hr_app_target_group" {
   target_type = "ip"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = aws_vpc.hr_app_vpc.id
+  vpc_id      = var.vpc_id
 
   health_check {
     enabled             = true

@@ -23,14 +23,14 @@ data "aws_availability_zones" "available_zones" {}
 resource "aws_security_group" "database_security_group" {
   name        = "database security group"
   description = "enable postgres access on port 5432"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = module.mainvpc.vpc_id
 
   ingress {
     description     = "postgres"
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    security_groups = module.security_group.hr_app_security_group_id
+    security_groups = [module.security_group.hr_app_security_group_id]
   }
 
   ingress {
@@ -77,8 +77,8 @@ resource "aws_db_instance" "db_instance" {
   instance_class         = "db.t3.micro"
   allocated_storage      = 400
   db_subnet_group_name   = aws_db_subnet_group.database_subnet_group.id
-  vpc_security_group_ids = module.security_group.hr_app_security_group_id
-  availability_zone      = data.aws_availability_zones.available_zones.names
+  vpc_security_group_ids =[ module.security_group.hr_app_security_group_id]
+  availability_zone      = data.aws_availability_zones.available_zones.names[0]
   db_name                = var.db_name
   publicly_accessible    = true
   skip_final_snapshot    = true

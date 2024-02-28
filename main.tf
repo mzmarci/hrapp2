@@ -5,10 +5,12 @@ module "hrapp" {
   ec2_instance_type      = "t2.micro"
   ec2_key_name           = "test100"
   vpc_security_group_ids = module.security_group.hr_app_security_group_id
-  subnet_id              = module.mainvpc.public_subnets_id[*]
+  public_subnets_id              = module.mainvpc.public_subnets_id[*]
 
 }
-
+  //number_of_images_to_keep = each.value == "react-nginx" ? "45" : "35"
+  //var.name
+  //on module=meach.value
 
 module "mainvpc" {
   source                 = "./module/networking"
@@ -21,7 +23,13 @@ module "mainvpc" {
   private_subnet_cidrs   = var.private_subnet_cidrs
   vpc_cidr               = var.vpc_cidr
   db_name                = var.db_name
-  vpc_id                 = module.vpc.vpc_id
+  vpc_id                 = module.mainvpc.vpc_id
+  
+
+  //number_of_images_to_keep = each.value == "react-nginx" ? "45" : "35"
+  //var.name
+  //on module=meach.value
+  //module.vpc.vpc_id
 
   tags = {
     Name = "Create VPC"

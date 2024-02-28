@@ -13,9 +13,11 @@ resource "aws_vpc" "hr_app_vpc" {
 #data "aws_availability_zones" "available_zones" {}
 
 resource "aws_subnet" "public_subnets" {
-  count             = length(split(",", var.public_subnet_cidrs))
+  count             = length(var.public_subnet_cidrs)
+  //count             = length(split(",", var.public_subnet_cidrs))
   vpc_id            = aws_vpc.hr_app_vpc.id
-  cidr_block        = element(split(",", var.public_subnet_cidrs), count.index)
+  cidr_block        = element(var.public_subnet_cidrs, count.index)
+  //cidr_block        = element(split(",", var.public_subnet_cidrs), count.index)
   availability_zone = data.aws_availability_zones.available_zones.names[count.index]
   map_public_ip_on_launch = true
   tags = {

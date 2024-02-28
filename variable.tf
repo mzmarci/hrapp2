@@ -3,13 +3,12 @@ variable "vpc_cidr" {
 }
 
 variable "public_subnet_cidrs" {
-  // type = list(string)
   description = "Public Subnet CIDR values"
   default = [
     "10.0.3.0/24",
     "10.0.4.0/24"
   ]
-}
+ }
 
 variable "tags" {
   default = [
@@ -19,28 +18,33 @@ variable "tags" {
 }
 
 variable "private_subnet_cidrs" {
-  default = [
+  default =    [
     "10.0.5.0/24",
     "10.0.6.0/24"
   ]
 }
 
 variable "rds_password" {
-  default = [
-    "marci123"
-  ]
+  type = string
+  default = "marci123"
+
 }
 
 variable "rds_username" {
-  default = [
-    "hr_project"
-  ]
+  type = string
+  default = "hr_project"
+  
 }
 
 variable "db_name" {
-  default = [
-    "projects"
-  ]
+  type = string
+  default = "projects"
+}
+
+variable "public_subnets_id" {
+  description = "this is a vraible to manage subnet_id in module"
+  type =list(string)
+  default = []
 }
 
 

@@ -77,7 +77,7 @@ resource "aws_db_instance" "db_instance" {
   instance_class         = "db.t3.micro"
   allocated_storage      = 400
   db_subnet_group_name   = aws_db_subnet_group.database_subnet_group.id
-  vpc_security_group_ids =[ module.security_group.hr_app_security_group_id]
+  vpc_security_group_ids = [module.security_group.hr_app_security_group_id]
   availability_zone      = data.aws_availability_zones.available_zones.names[0]
   db_name                = var.db_name
   publicly_accessible    = true

@@ -2,15 +2,16 @@
 module "hrapp" {
   source                 = "./module/ec2"
   ec2_ami                = "ami-0a7abae115fc0f825"
-  ec2_instance_type      = "t2.micro"
-  ec2_key_name           = "test100"
+  ec2_instance_type      = var.ec2_instance_type == "prod" ? "t2.micro" : "t3.medium"
+  ec2_key_name           = var.ec2_key_name == "prod" ? "test100" : "assign1"
+  //ec2_key_name           = var.ec2_key_name1 == "dev" ? "test100" : var.ec2_key_name
   vpc_security_group_ids = module.security_group.hr_app_security_group_id
-  public_subnets_id              = module.mainvpc.public_subnets_id[*]
+  public_subnets_id      = module.mainvpc.public_subnets_id[*]
 
 }
-  //number_of_images_to_keep = each.value == "react-nginx" ? "45" : "35"
-  //var.name
-  //on module=meach.value
+//number_of_images_to_keep = each.value == "react-nginx" ? "45" : "35"
+//var.name
+//on module=meach.value
 
 module "mainvpc" {
   source                 = "./module/networking"
@@ -24,7 +25,7 @@ module "mainvpc" {
   vpc_cidr               = var.vpc_cidr
   db_name                = var.db_name
   vpc_id                 = module.mainvpc.vpc_id
-  
+
 
   //number_of_images_to_keep = each.value == "react-nginx" ? "45" : "35"
   //var.name

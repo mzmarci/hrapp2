@@ -8,6 +8,7 @@ module "hrapp" {
   vpc_security_group_ids = module.security_group.hr_app_security_group_id
   public_subnets_id      = module.mainvpc.public_subnets_id[*]
 
+
 }
 //number_of_images_to_keep = each.value == "react-nginx" ? "45" : "35"
 //var.name

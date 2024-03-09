@@ -52,8 +52,8 @@ variable "public_subnets_id" {
 variable "ec2_key_name" {
   description = "this is a variable to manage ec2_key_name"
   type        = string
-  default     = "test100"
-  //default = "prod"
+  //default     = "test100"
+  default = "prod"
 }
 
 /* variable "ec2_key_name1" {
@@ -69,6 +69,32 @@ variable "ec2_instance_type" {
   //default     = "t2.micro"
   default = "prod"
 
+}
+
+variable "deregistration_delay" {
+  description = "The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused"
+  default     = "300"
+}
+
+variable "health_check_interval" {
+  description = "The interval between performing a health check"
+  default     = "30"
+}
+
+variable "healthy_threshold" {
+  description = "The number of consecutive health checks successes required before considering an unhealthy target healthy"
+  default     = "3"
+}
+
+variable "unhealthy_threshold" {
+  description = "The number of consecutive health check failures required before considering the target unhealthy"
+  default     = "3"
+}
+
+
+variable "preserve_client_ip" {
+  description = "Whether to preserve the client (source) IP - false will regard all traffic as originating from the eni, for example"
+  default     = true
 }
 
 /* variable "private_subnets_id" {
